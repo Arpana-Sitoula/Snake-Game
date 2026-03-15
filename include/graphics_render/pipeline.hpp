@@ -1,5 +1,15 @@
 #pragma once
 
+/**
+ * PIPELINE / SHADER (Graphics Render)
+ * Purpose: Handles the tiny programs (Shaders) that run directly on the GPU.
+ * 
+ * Flow:
+ * - init(): Loads two text files (`.vert` and `.frag`) from disk, compiles them, 
+ *   and links them together into a "Graphics Pipeline" (Program)
+ * - bind(): Tells the GPU to use this specific program for the next draw calls
+ * - set_color(): Sends a custom RGB color to the Shader (overriding whatever color the mesh had)
+ */
 struct Pipeline {
     void init(const std::string& vs_name, const std::string& fs_name) {
         // base directory of the executable

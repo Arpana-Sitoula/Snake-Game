@@ -1,5 +1,15 @@
 #pragma once
 
+/**
+ * WINDOW (Graphics Render)
+ * Purpose: The foundational OS window that the game lives in.
+ * 
+ * Flow:
+ * - init(): Asks SDL to spawn a physical desktop window.
+ * - Creates an "OpenGL Context" (a private drawing area on the GPU attached to this window).
+ * - Tells OpenGL how to behave (enable 3D depth, cull hidden faces, turn on Vsync).
+ * - destroy(): Closes the window when the game exits.
+ */
 struct Window {
     void init(int width, int height) {
         // init the SDL video subsystem before anything else

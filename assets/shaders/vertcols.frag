@@ -39,6 +39,6 @@ void main() {
     vec3 diffuse_light = light_col * diffuse_str;
 
     // out_color = in_col; // keep this here for later
-    out_color.xyz = vec3(diffuse_col) * (ambient_light + diffuse_light);
+    out_color.xyz = vec3(diffuse_col);
     out_color.a   = diffuse_col.a; // since alpha is left out of light calculations
 }

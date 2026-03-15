@@ -1,5 +1,15 @@
 #pragma once
 
+/**
+ * INPUT (Graphics Render / System)
+ * Purpose: A global system that captures and stores what keys/mouse buttons are pressed.
+ * 
+ * Flow:
+ * - Data: Hidden singleton holding memory of what is pressed, held, or released
+ * - register_event(): The Engine passes raw SDL events here to be sorted
+ * - flush(): Clears single-frame actions (like "just pressed") at the end of each frame
+ * - Keys/Mouse: Easy-to-read Helper structs so the game can just ask `Keys::pressed(SDLK_W)`
+ */
 namespace Input {
 	// data storage for internal use only
 	struct Data {
@@ -80,12 +90,14 @@ namespace Input {
 			case SDL_EventType::SDL_EVENT_MOUSE_BUTTON_DOWN: 
 				Data::get().buttons_pressed.insert(event.button.button);
 				Data::get().buttons_down.insert(event.button.button);
+				Data::get().x = event.button.x;
+				Data::get().y = event.button.y;
 				break;
 			case SDL_EventType::SDL_EVENT_MOUSE_MOTION:
-				Data::get().dx += event.motion.xrel;
-				Data::get().dy += event.motion.yrel;
-				Data::get().x += event.motion.xrel;
-				Data::get().y += event.motion.yrel;
+				Data::get().dx = event.motion.xrel;
+				Data::get().dy = event.motion.yrel;
+				Data::get().x = event.motion.x;
+				Data::get().y = event.motion.y;
 				break;
 			default: break;
 		}

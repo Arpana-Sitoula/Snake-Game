@@ -1,5 +1,16 @@
 #pragma once
 
+/**
+ * CAMERA (Graphics Render)
+ * Purpose: Acts as the "eye" through which the player sees the 3D world.
+ * 
+ * Flow:
+ * - Stores its position, rotation, and lens properties (field of view, aspect ratio)
+ * - bind(): Calculates two special Matrices:
+ *   1. Transform Matrix: Moves everything in the world *opposite* to the camera to simulate looking around
+ *   2. Projection Matrix: Squeezes the 3D world into the 2D window (giving perspective)
+ * - Sends these matrices to the GPU so it knows how to draw objects from this viewpoint
+ */
 struct Camera {
     // translate relative to camera direction
     void translate(float x, float y, float z) {
@@ -25,6 +36,6 @@ struct Camera {
     float _near_plane = 0.1f;  // nearest distance the camera can render
     float _far_plane = 100.0f; // furthest distance the camera can render
     float _fov = 70.0f; // field of view
-    float _width = 1280.0f; // should be equal to window width
-    float _height = 720.0f; // should be equal to window height
+    float _width = 1080.0f; // should be equal to window width
+    float _height = 1080.0f; // should be equal to window height
 };

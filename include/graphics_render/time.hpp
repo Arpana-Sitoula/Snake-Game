@@ -1,5 +1,15 @@
 #pragma once
 
+/**
+ * TIME (Graphics Render / System)
+ * Purpose: Keeps track of how long the game has been running and the time between frames.
+ * 
+ * Flow:
+ * - update(): Called at the start of every frame. Compares current time to the last frame.
+ * - `_delta`: "Delta time" - extremely important. The number of seconds since the last frame 
+ *   (usually around 0.016s if running at 60fps). Used by the game logic to make 
+ *   things move at the same speed regardless of computer speed.
+ */
 struct Time {
     using Clock = std::chrono::high_resolution_clock;
     void init() {

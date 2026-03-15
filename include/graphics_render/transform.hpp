@@ -1,5 +1,14 @@
 #pragma once
 
+/**
+ * TRANSFORM (Graphics Render)
+ * Purpose: Keeps track of coordinates in 3D space: Position, Rotation, Scale.
+ * 
+ * Flow:
+ * - Stores 3D vectors for where an object is, how it's turned, and its size
+ * - bind(): Converts these simple vectors into complex "Matrices" (4x4 grids of numbers)
+ * - Sends these matrices directly into the GPU shader (default.vert) to do the math
+ */
 struct Transform {
     void bind() {
         // normals should only ever be rotated

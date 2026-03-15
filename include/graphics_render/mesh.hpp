@@ -1,5 +1,17 @@
 #pragma once
 
+/**
+ * MESH (Graphics Render)
+ * Purpose: Defines the raw 3D geometry (vertices, triangles) to be drawn by OpenGL.
+ * 
+ * Flow:
+ * - Stores the raw data points (Vertex: position, normal, uv, color)
+ * - init(): Sends this data from the CPU to the graphics card (GPU)
+ * - bind() & draw(): Tells the GPU to draw the loaded geometry
+ * 
+ * Note: A mesh is just the shape itself. It has no position or scale in the world.
+ */
+
 // sizeof(Vertex) = sizeof(float) * 4 = 16 bytes
 struct Vertex {
     glm::vec3 position; // x, y, z
