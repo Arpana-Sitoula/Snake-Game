@@ -128,7 +128,7 @@ struct SnakeGame {
         float total_h = board.height * board.cell_size;
         float border_thickness = 0.34f; // thin border
         
-        pipeline.set_color(glm::vec4(0.906f, 0.561f, 0.557f, 1.0f)); 
+        pipeline.set_color(glm::vec4(1.0f, 0.42f, 0.42f, 1.0f)); 
         
         // Top edge
         cell_model.transform._position = glm::vec3(0, total_h / 2.0f + border_thickness / 2.0f, 0);
@@ -183,7 +183,7 @@ struct SnakeGame {
 
         cell_model.transform._position = glm::vec3(0, score_bg_y, 0);
         cell_model.transform._scale = glm::vec3(score_bg_width, score_bg_height, 1);
-        pipeline.set_color(glm::vec4(0.996f, 0.784f, 0.604f, 1.0f));
+        pipeline.set_color(glm::vec4(0.5922f, 0.8078f, 0.9882f, 1.0f));
         cell_model.draw();
 
         // 5. Draw score digits
