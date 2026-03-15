@@ -9,6 +9,8 @@
 // Forward declare Pipeline (we only use it as a reference parameter)
 struct Pipeline;
 
+#include <iostream>
+
 /**
  * SNAKE GAME
  * Purpose: Connects the raw game logic to the graphics engine to make a playable game.
@@ -29,7 +31,7 @@ struct SnakeGame {
     
     void init() {
         cell_model.init();
-        snake.init(board.width / 4, board.height / 2);
+        snake.init(board.width / 4, board.height / 4);
         food.spawn(board, snake);
     }
     
@@ -45,8 +47,35 @@ struct SnakeGame {
         if (Keys::pressed(SDLK_D) || Keys::pressed(SDLK_RIGHT)) snake.set_direction(Snake::Direction::RIGHT);
         
         if (Keys::pressed(SDLK_R)) {
-            snake.init(board.width / 4, board.height / 2);
+            snake.init(board.width / 4, board.height / 4);
             food.spawn(board, snake);
+        }
+
+        // Handle Mouse Click and Hover on Restart Button
+        if (!snake.alive) {
+            auto [mx, my] = Mouse::position();
+
+            // Based on user prints, the button bounds in Screen Space are roughly:
+            // X: [-40, 370]
+            // Y: [-130, -40] (in SDL, Y goes down, but since we had negatives let's just use raw values)
+            bool is_hovering = (mx >= -45 && mx <= 375 && my >= -135 && my <= -35);
+
+            if (is_hovering) {
+                SDL_Cursor* cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_POINTER);
+                SDL_SetCursor(cursor);
+            } else {
+                SDL_Cursor* cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_DEFAULT);
+                SDL_SetCursor(cursor);
+            }
+
+            if (is_hovering && Mouse::pressed(Mouse::ids::left)) {
+                // Reset cursor before restarting
+                SDL_Cursor* cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_DEFAULT);
+                SDL_SetCursor(cursor);
+                
+                snake.init(board.width / 4, board.height / 4);
+                food.spawn(board, snake);
+            }
         }
     }
     
@@ -76,7 +105,7 @@ struct SnakeGame {
             }
         }
         
-        // 1.5 Draw border
+        // 1.5 Draw border 
         float total_w = board.width * board.cell_size;
         float total_h = board.height * board.cell_size;
         float border_thickness = 0.34f; // thin border
@@ -153,5 +182,33 @@ struct SnakeGame {
         DigitRenderer::draw(d1, -spacing, score_bg_y, digit_scale, digit_thick, cell_model);
         DigitRenderer::draw(d2, 0.0f,     score_bg_y, digit_scale, digit_thick, cell_model);
         DigitRenderer::draw(d3, spacing,  score_bg_y, digit_scale, digit_thick, cell_model);
+
+        // 6. Draw Restart Button (Only if dead)
+        if (!snake.alive) {
+            float restart_width = 3.6f;
+            float restart_height = 0.8f;
+            float restart_y = -board_top - border_thickness - restart_height / 2.0f - 0.2f;
+
+            // Background
+            cell_model.transform._position = glm::vec3(0, restart_y, 0);
+            cell_model.transform._scale = glm::vec3(restart_width, restart_height, 1);
+            pipeline.set_color(glm::vec4(1.0f, 0.42f, 0.42f, 1.0f));
+            cell_model.draw();
+
+            // Word 'RESTART'
+            pipeline.set_color(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // White text
+            float let_scale = 0.15f;
+            float let_thick = 0.04f;
+            float let_space = 0.4f;
+            float start_x = -let_space * 3.0f;
+
+            DigitRenderer::draw_r(start_x, restart_y, let_scale, let_thick, cell_model);
+            DigitRenderer::draw_e(start_x + let_space * 1, restart_y, let_scale, let_thick, cell_model);
+            DigitRenderer::draw_s(start_x + let_space * 2, restart_y, let_scale, let_thick, cell_model);
+            DigitRenderer::draw_t(start_x + let_space * 3, restart_y, let_scale, let_thick, cell_model);
+            DigitRenderer::draw_a(start_x + let_space * 4, restart_y, let_scale, let_thick, cell_model);
+            DigitRenderer::draw_r(start_x + let_space * 5, restart_y, let_scale, let_thick, cell_model);
+            DigitRenderer::draw_t(start_x + let_space * 6, restart_y, let_scale, let_thick, cell_model);
+        }
     }
 };

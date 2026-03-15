@@ -88,4 +88,84 @@ struct DigitRenderer {
             model.draw();
         }
     }
+
+    // For spelling "RESTART" without a font library
+    static void draw_r(float x, float y, float scale, float thickness, Model& model) {
+        float h_len = scale;
+        float v_len = scale;
+        float t = thickness;
+
+        // Left vertical (top and bottom)
+        model.transform._position = glm::vec3(x - h_len / 2.0f, y + v_len / 2.0f, 0);
+        model.transform._scale = glm::vec3(t, v_len, 1);
+        model.draw();
+        
+        model.transform._position = glm::vec3(x - h_len / 2.0f, y - v_len / 2.0f, 0);
+        model.transform._scale = glm::vec3(t, v_len, 1);
+        model.draw();
+
+        // Top horizontal
+        model.transform._position = glm::vec3(x, y + v_len, 0);
+        model.transform._scale = glm::vec3(h_len, t, 1);
+        model.draw();
+
+        // Top right vertical
+        model.transform._position = glm::vec3(x + h_len / 2.0f, y + v_len / 2.0f, 0);
+        model.transform._scale = glm::vec3(t, v_len, 1);
+        model.draw();
+
+        // Middle horizontal
+        model.transform._position = glm::vec3(x, y, 0);
+        model.transform._scale = glm::vec3(h_len, t, 1);
+        model.transform._rotation = glm::vec3(0, 0, 0);
+        model.draw();
+
+        // Bottom right diagonal (rotated leg)
+        model.transform._position = glm::vec3(x + h_len / 4.0f, y - v_len / 2.0f, 0);
+        model.transform._scale = glm::vec3(t, v_len * 1.2f, 1);
+        model.transform._rotation = glm::vec3(0, 0, 0.4f); // Angle it outward
+        model.draw();
+        
+        // Reset rotation so it doesn't affect subsequent segments
+        model.transform._rotation = glm::vec3(0, 0, 0);
+    }
+
+    static void draw_e(float x, float y, float scale, float thickness, Model& model) {
+        float h_len = scale; float v_len = scale; float t = thickness;
+        // left vertical
+        model.transform._position = glm::vec3(x - h_len / 2.0f, y + v_len / 2.0f, 0); model.transform._scale = glm::vec3(t, v_len, 1); model.draw();
+        model.transform._position = glm::vec3(x - h_len / 2.0f, y - v_len / 2.0f, 0); model.transform._scale = glm::vec3(t, v_len, 1); model.draw();
+        // top, mid, bottom horizontal
+        model.transform._position = glm::vec3(x, y + v_len, 0); model.transform._scale = glm::vec3(h_len, t, 1); model.draw();
+        model.transform._position = glm::vec3(x, y, 0); model.transform._scale = glm::vec3(h_len, t, 1); model.draw();
+        model.transform._position = glm::vec3(x, y - v_len, 0); model.transform._scale = glm::vec3(h_len, t, 1); model.draw();
+    }
+    static void draw_s(float x, float y, float scale, float thickness, Model& model) {
+        float h_len = scale; float v_len = scale; float t = thickness;
+        // top left vert, bottom right vert
+        model.transform._position = glm::vec3(x - h_len / 2.0f, y + v_len / 2.0f, 0); model.transform._scale = glm::vec3(t, v_len, 1); model.draw();
+        model.transform._position = glm::vec3(x + h_len / 2.0f, y - v_len / 2.0f, 0); model.transform._scale = glm::vec3(t, v_len, 1); model.draw();
+        // horizontals
+        model.transform._position = glm::vec3(x, y + v_len, 0); model.transform._scale = glm::vec3(h_len, t, 1); model.draw();
+        model.transform._position = glm::vec3(x, y, 0); model.transform._scale = glm::vec3(h_len, t, 1); model.draw();
+        model.transform._position = glm::vec3(x, y - v_len, 0); model.transform._scale = glm::vec3(h_len, t, 1); model.draw();
+    }
+    static void draw_t(float x, float y, float scale, float thickness, Model& model) {
+        float h_len = scale; float v_len = scale; float t = thickness;
+        // top horiz
+        model.transform._position = glm::vec3(x, y + v_len, 0); model.transform._scale = glm::vec3(h_len, t, 1); model.draw();
+        // center vert
+        model.transform._position = glm::vec3(x, y, 0); model.transform._scale = glm::vec3(t, v_len * 2, 1); model.draw();
+    }
+    static void draw_a(float x, float y, float scale, float thickness, Model& model) {
+        float h_len = scale; float v_len = scale; float t = thickness;
+        // left vert, right vert
+        model.transform._position = glm::vec3(x - h_len / 2.0f, y + v_len / 2.0f, 0); model.transform._scale = glm::vec3(t, v_len, 1); model.draw();
+        model.transform._position = glm::vec3(x - h_len / 2.0f, y - v_len / 2.0f, 0); model.transform._scale = glm::vec3(t, v_len, 1); model.draw();
+        model.transform._position = glm::vec3(x + h_len / 2.0f, y + v_len / 2.0f, 0); model.transform._scale = glm::vec3(t, v_len, 1); model.draw();
+        model.transform._position = glm::vec3(x + h_len / 2.0f, y - v_len / 2.0f, 0); model.transform._scale = glm::vec3(t, v_len, 1); model.draw();
+        // top horiz, mid horiz
+        model.transform._position = glm::vec3(x, y + v_len, 0); model.transform._scale = glm::vec3(h_len, t, 1); model.draw();
+        model.transform._position = glm::vec3(x, y, 0); model.transform._scale = glm::vec3(h_len, t, 1); model.draw();
+    }
 };
