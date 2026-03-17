@@ -143,7 +143,7 @@ struct Engine {
 
         // Game logic
         game_manager.handle_input();
-        game_manager.update(time._delta, _wow, _wow_stream, _faaah, _faaah_stream);
+        game_manager.update(time._delta, camera, _wow, _wow_stream, _faaah, _faaah_stream);
         
         // Render
         pipeline.bind();

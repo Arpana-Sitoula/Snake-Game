@@ -25,13 +25,22 @@ struct Model {
     }
     
     // Set position in world space
+    void set_position(float x, float y, float z) {
+        transform._position = glm::vec3(x, y, z);
+    }
+    
     void set_position(float x, float y) {
         transform._position = glm::vec3(x, y, 0);
     }
     
     // Set size (uniform scale)
     void set_scale(float size) {
-        transform._scale = glm::vec3(size, size, 1);
+        transform._scale = glm::vec3(size, size, size);
+    }
+
+    // Set size (per-axis scale)
+    void set_scale(float x, float y, float z) {
+        transform._scale = glm::vec3(x, y, z);
     }
     
     // Draw this model (caller must set color via pipeline first!)
