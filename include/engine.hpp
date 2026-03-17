@@ -58,8 +58,8 @@ struct Engine {
         _kitty_pipeline.init("default.vert", "background.frag");
         _kitty_texture.init("kitty.png");
         _kitty_model.init();
-        _kitty_model.set_position(-3.5f, 0.0f);
-        _kitty_model.transform._rotation = glm::vec3(0, 0, glm::radians(-90.0f));
+        _kitty_model.set_position(-2.5f, 3.55f);
+        _kitty_model.transform._rotation = glm::vec3(0, 0, glm::radians(180.0f));
         _kitty_model.set_scale(1.8f);
 
         // Init Audio Subsystem
