@@ -6,7 +6,7 @@
 #include "graphics_render/pipeline.hpp"
 #include "graphics_render/audio.hpp"
 #include "graphics_render/texture.hpp"
-#include "snake_game.hpp"
+#include "game_site_manager.hpp"
 
 /**
  * ENGINE
@@ -40,14 +40,14 @@ struct Engine {
     Audio _wow, _faaah;
     SDL_AudioStream *_wow_stream = nullptr, *_faaah_stream = nullptr;
 
-    // The game
-    SnakeGame game;
+    // The game manager
+    GameSiteManager game_manager;
     
     Engine() {
         time.init();
         window.init(1080, 1080);
         pipeline.init("default.vert", "vertcols.frag");
-        game.init();
+        game_manager.init();
         
         // Background Init
         _bg_pipeline.init("background.vert", "background.frag");
@@ -102,7 +102,7 @@ struct Engine {
         _kitty_texture.destroy();
         _kitty_pipeline.destroy();
         
-        game.destroy();
+        game_manager.destroy();
         pipeline.destroy();
         window.destroy();
     }
@@ -122,32 +122,33 @@ struct Engine {
         glClearColor(0.05f, 0.05f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        // Disable depth testing for 2D game
-        glDisable(GL_DEPTH_TEST);
-        
-        // Draw Background
-        _bg_pipeline.bind();
-        _bg_texture.bind();
-        _bg_mesh.bind();
-        _bg_mesh.draw();
+        bool is_snake_game = (game_manager.current_state == GameSiteManager::State::SNAKE_GAME);
 
-        // Draw Kitty Decoration 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        _kitty_pipeline.bind();
-        camera.bind(); 
-        _kitty_texture.bind();
-        _kitty_model.draw();
-        glDisable(GL_BLEND);
+        if (is_snake_game) {
+            // Draw Background
+            _bg_pipeline.bind();
+            _bg_texture.bind();
+            _bg_mesh.bind();
+            _bg_mesh.draw();
+
+            // Draw Kitty Decoration 
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            _kitty_pipeline.bind();
+            camera.bind(); 
+            _kitty_texture.bind();
+            _kitty_model.draw();
+            glDisable(GL_BLEND);
+        }
 
         // Game logic
-        game.handle_input();
-        game.update(time._delta, _wow, _wow_stream, _faaah, _faaah_stream);
+        game_manager.handle_input();
+        game_manager.update(time._delta, _wow, _wow_stream, _faaah, _faaah_stream);
         
         // Render
         pipeline.bind();
         camera.bind();
-        game.draw(pipeline);
+        game_manager.draw(pipeline);
         
         // Present
         SDL_GL_SwapWindow(window._window_p);
