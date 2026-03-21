@@ -26,20 +26,6 @@ struct Engine {
     Camera camera;
     Pipeline pipeline;
     
-    // Background
-    Pipeline _bg_pipeline;
-    Texture _bg_texture;
-    Mesh _bg_mesh;
-    
-    // Kitty Decoration
-    Pipeline _kitty_pipeline;
-    Texture _kitty_texture;
-    Model _kitty_model;
-
-    // Audio
-    Audio _wow, _faaah;
-    SDL_AudioStream *_wow_stream = nullptr, *_faaah_stream = nullptr;
-
     // The game manager
     GameSiteManager game_manager;
     
@@ -48,40 +34,6 @@ struct Engine {
         window.init(1080, 1080);
         pipeline.init("default.vert", "vertcols.frag");
         game_manager.init();
-        
-        // Background Init
-        _bg_pipeline.init("background.vert", "background.frag");
-        _bg_texture.init("image.png");
-        _bg_mesh.init();
-
-        // Kitty Init
-        _kitty_pipeline.init("default.vert", "background.frag");
-        _kitty_texture.init("kitty.png");
-        _kitty_model.init();
-        _kitty_model.set_position(-2.5f, 3.55f);
-        _kitty_model.transform._rotation = glm::vec3(0, 0, glm::radians(180.0f));
-        _kitty_model.set_scale(1.8f);
-
-        // Init Audio Subsystem
-        SDL_InitSubSystem(SDL_INIT_AUDIO);
-        _wow.init("assets/audio/woww.wav");
-        _faaah.init("assets/audio/faaah.wav");
-
-        // Open streams for playback
-        _wow_stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr, nullptr, nullptr);
-        _faaah_stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr, nullptr, nullptr);
-
-        SDL_AudioSpec device_format;
-        SDL_GetAudioDeviceFormat(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &device_format, nullptr);
-
-        if (_wow_stream) {
-            SDL_SetAudioStreamFormat(_wow_stream, &_wow.spec, &device_format);
-            SDL_ResumeAudioStreamDevice(_wow_stream);
-        }
-        if (_faaah_stream) {
-            SDL_SetAudioStreamFormat(_faaah_stream, &_faaah.spec, &device_format);
-            SDL_ResumeAudioStreamDevice(_faaah_stream);
-        }
 
         // Fixed camera looking at the board
         camera._position = glm::vec3(0, 0, 10);
@@ -89,19 +41,6 @@ struct Engine {
     }
     
     ~Engine() {
-        if (_wow_stream) SDL_DestroyAudioStream(_wow_stream);
-        if (_faaah_stream) SDL_DestroyAudioStream(_faaah_stream);
-        _wow.destroy();
-        _faaah.destroy();
-
-        _bg_mesh.destroy();
-        _bg_texture.destroy();
-        _bg_pipeline.destroy();
-
-        _kitty_model.destroy();
-        _kitty_texture.destroy();
-        _kitty_pipeline.destroy();
-        
         game_manager.destroy();
         pipeline.destroy();
         window.destroy();
@@ -122,33 +61,12 @@ struct Engine {
         glClearColor(0.05f, 0.05f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        bool is_snake_game = (game_manager.current_state == GameSiteManager::State::SNAKE_GAME);
-
-        if (is_snake_game) {
-            // Draw Background
-            _bg_pipeline.bind();
-            _bg_texture.bind();
-            _bg_mesh.bind();
-            _bg_mesh.draw();
-
-            // Draw Kitty Decoration 
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            _kitty_pipeline.bind();
-            camera.bind(); 
-            _kitty_texture.bind();
-            _kitty_model.draw();
-            glDisable(GL_BLEND);
-        }
-
         // Game logic
         game_manager.handle_input();
-        game_manager.update(time._delta, camera, _wow, _wow_stream, _faaah, _faaah_stream);
+        game_manager.update(time._delta, camera);
         
         // Render
-        pipeline.bind();
-        camera.bind();
-        game_manager.draw(pipeline);
+        game_manager.draw(pipeline, camera);
         
         // Present
         SDL_GL_SwapWindow(window._window_p);

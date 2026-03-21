@@ -1,14 +1,11 @@
 #pragma once
 #include <random>
+#include "board.hpp"
+#include "snake.hpp"
 
 /**
- * FOOD (Game Logic)
- * Purpose: Manages the position and spawning of the collectible fruit.
- * 
- * Flow:
- * - Stores a single grid coordinate for the food
- * - spawn(): Randomly picks a new X/Y spot on the board, making sure it doesn't land on the snake
- * - check_eaten(): Simply returns true if the food's coordinate matches the snake's head
+ * FOOD (Model)
+ * Purpose: Manages the position and spawning of theCollectible fruit.
  */
 struct Food {
     glm::ivec2 position = {5, 5};
@@ -20,13 +17,11 @@ struct Food {
         std::uniform_int_distribution<> dist_x(0, board.width - 1);
         std::uniform_int_distribution<> dist_y(0, board.height - 1);
         
-        // Keep trying until we find empty spot
         bool valid = false;
         while (!valid) {
             position.x = dist_x(gen);
             position.y = dist_y(gen);
             
-            // Check not on snake
             valid = true;
             for (const auto& segment : snake.body) {
                 if (position == segment) {

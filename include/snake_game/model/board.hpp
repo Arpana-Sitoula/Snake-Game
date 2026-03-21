@@ -2,14 +2,8 @@
 #include <vector>
 
 /**
- * BOARD (Game Logic)
+ * BOARD (Model)
  * Purpose: Defines the physical size and boundaries of the game grid.
- * 
- * Flow:
- * - Stores how many cells wide and tall the grid is, and how big a cell is in 3D units
- * - grid_to_world(): Converts a grid coordinate (e.g. 5, 5) into real 3D space 
- *   so the graphics engine knows exactly where to draw it centered on the screen
- * - is_valid(): Checks if a coordinate is outside the map boundaries (used for wall collisions)
  */
 struct Board {
     int width = 20;   // grid cells horizontally

@@ -1,16 +1,10 @@
 #pragma once
-#include <vector>
 #include <deque>
+#include "board.hpp"
 
 /**
- * SNAKE (Game Logic)
+ * SNAKE (Model)
  * Purpose: Manages the player's snake state, movement logic, and growth.
- * 
- * Flow:
- * - Stores the snake's body as a list of grid coordinates (head is front, tail is back)
- * - Tracks direction, movement speed (timer), score, and alive status
- * - update(): Checks the timer and moves the snake automatically every interval
- * - move(): Calculates where the new head goes, checks self-collision, and removes tail
  */
 struct Snake {
     enum class Direction { UP, DOWN, LEFT, RIGHT };
@@ -40,7 +34,7 @@ struct Snake {
             (dir == Direction::DOWN && direction != Direction::UP) ||
             (dir == Direction::LEFT && direction != Direction::RIGHT) ||
             (dir == Direction::RIGHT && direction != Direction::LEFT)) {
-            next_direction = dir;
+                next_direction = dir;
         }
     }
     
@@ -85,7 +79,6 @@ struct Snake {
     }
     
     void grow() {
-        // Add segment at tail position
         body.push_back(body.back());
         score++;
     }
