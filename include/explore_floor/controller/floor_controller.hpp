@@ -1,10 +1,11 @@
 #pragma once
 #include "../../graphics_render/input.hpp"
 #include "../../graphics_render/camera.hpp"
+#include <glm/glm.hpp>
 
 /**
  * FLOOR CONTROLLER
- * Purpose: Handles the 3D camera / movement for exploring the floor.
+ * Purpose: Handles the 3D camera / movement for exploring the floor (FPP).
  */
 struct FloorController {
     void handle_input(Camera& camera, float delta) {
@@ -18,10 +19,10 @@ struct FloorController {
         if (Keys::down(SDLK_D)) camera.translate(speed, 0, 0);
 
         // -- WALKING PHYSICS --
-        // 1. Lock height to ground (head height)
-        camera._position.y = 1.6f;
+        // 1. Lock height to eye level
+        camera._position.y = 2.5f;
 
-        // 2. Collision Detection (Prevent leaving the room)
+        // 2. Collision Detection 
         float boundary = 9.8f;
         float door_width = 2.0f;
 

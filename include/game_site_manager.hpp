@@ -40,14 +40,16 @@ struct GameSiteManager {
                 current_state = State::EXPLORE_FLOOR;
                 SDL_SetWindowRelativeMouseMode(SDL_GetGrabbedWindow(), true); // Lock mouse for 3D
                 // Start at the door
-                camera._position = glm::vec3(0, 1.6f, 11.0f);
+                camera._position = glm::vec3(0, 1.8f, 11.0f);
                 camera._rotation = glm::vec3(0, 0, 0);
+                camera._fov = 70.0f; // Original 70 degrees for 3D exploration
             } else {
                 current_state = State::SNAKE_GAME;
                 SDL_SetWindowRelativeMouseMode(SDL_GetGrabbedWindow(), false); // Unlock mouse for 2D
                 // Reset camera for 2D game
                 camera._position = glm::vec3(0, 0, 10);
                 camera._rotation = glm::vec3(0, 0, 0);
+                camera._fov = 50.0f; // Approx original look for 2D board
             }
         }
 
@@ -61,6 +63,7 @@ struct GameSiteManager {
             // Reset camera for 2D game
             camera._position = glm::vec3(0, 0, 10);
             camera._rotation = glm::vec3(0, 0, 0);
+            camera._fov = 50.0f;
             snake_game.update(delta);
             glDisable(GL_DEPTH_TEST);
         } else {

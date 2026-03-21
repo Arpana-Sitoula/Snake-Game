@@ -8,6 +8,7 @@
 #include "graphics_render/pipeline.hpp"
 #include "graphics_render/camera.hpp"
 #include "graphics_render/model.hpp"
+#include "graphics_render/texture.hpp"
 
 /**
  * EXPLORE FLOOR (MVC Container)
@@ -26,7 +27,7 @@ struct ExploreFloor {
     // Controller
     FloorController controller;
 
-    // Shared Graphics Assets
+    // Assets
     Model test_box; // Internal model for drawing boxes
 
     void init() {
@@ -52,6 +53,8 @@ struct ExploreFloor {
     void draw(Pipeline& pipeline, Camera& camera) {
         pipeline.bind();
         camera.bind();
+        
+        // Draw Environment
         view.draw(base_floor, sofa_model, wall_model, carpet_model, pipeline, test_box);
     }
 };

@@ -32,12 +32,13 @@ struct Engine {
     Engine() {
         time.init();
         window.init(1080, 1080);
-        pipeline.init("default.vert", "vertcols.frag");
+        pipeline.init("default.vert", "default.frag");
         game_manager.init();
 
-        // Fixed camera looking into the room from the door entrance
-        camera._position = glm::vec3(0, 1.6f, 11.0f);
+        // Default camera for 2D Snake Game
+        camera._position = glm::vec3(0, 0, 10);
         camera._rotation = glm::vec3(0, 0, 0);
+        camera._fov = 50.0f;
     }
     
     ~Engine() {
