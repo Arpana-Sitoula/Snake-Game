@@ -8,10 +8,13 @@
  * Purpose: Renders the carpets in the scene.
  */
 struct CarpetView {
-    void draw(CarpetModel& model, Pipeline& pipeline, Model& test_box) {
+    void draw(CarpetModel& model, Pipeline& pipeline, Model& test_box, Texture& texture) {
+        pipeline.use_texture(true);
+        texture.bind();
         for (const auto& carpet : model.carpets) {
             draw_box(pipeline, test_box, carpet.position, carpet.size, carpet.color);
         }
+        pipeline.use_texture(false);
     }
 
 private:

@@ -92,8 +92,16 @@ struct Pipeline {
         glUniform1i(17, 1);  // enable uniform color
     }
     
+    void use_uniform_color(bool enabled) {
+        glUniform1i(17, enabled ? 1 : 0);
+    }
+
+    void use_texture(bool enabled) {
+        glUniform1i(18, enabled ? 1 : 0);
+    }
+
     void clear_color_override() {
-        glUniform1i(17, 0);  // disable uniform color, use vertex colors
+        use_uniform_color(false);
     }
 
     GLuint _shader_program;

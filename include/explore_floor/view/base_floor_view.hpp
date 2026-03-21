@@ -8,8 +8,11 @@
  * Purpose: Renders the base floor.
  */
 struct BaseFloorView {
-    void draw(BaseFloorModel& model, Pipeline& pipeline, Model& test_box) {
+    void draw(BaseFloorModel& model, Pipeline& pipeline, Model& test_box, Texture& texture) {
+        pipeline.use_texture(true);
+        texture.bind();
         draw_box(pipeline, test_box, model.position, model.size, model.color);
+        pipeline.use_texture(false);
     }
 
 private:

@@ -39,6 +39,8 @@ struct Engine {
         camera._position = glm::vec3(0, 0, 10);
         camera._rotation = glm::vec3(0, 0, 0);
         camera._fov = 50.0f;
+
+        pipeline.use_texture(false);
     }
     
     ~Engine() {
@@ -63,7 +65,7 @@ struct Engine {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         // Game logic
-        game_manager.handle_input(camera);
+        game_manager.handle_input(window, camera);
         game_manager.update(time._delta, camera);
         
         // Render

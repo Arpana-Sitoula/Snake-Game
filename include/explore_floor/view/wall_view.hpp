@@ -8,10 +8,13 @@
  * Purpose: Renders the walls in the scene.
  */
 struct WallView {
-    void draw(WallModel& model, Pipeline& pipeline, Model& test_box) {
+    void draw(WallModel& model, Pipeline& pipeline, Model& test_box, Texture& texture) {
+        pipeline.use_texture(true);
+        texture.bind();
         for (const auto& wall : model.walls) {
             draw_box(pipeline, test_box, wall.position, wall.size, wall.color);
         }
+        pipeline.use_texture(false);
     }
 
 private:

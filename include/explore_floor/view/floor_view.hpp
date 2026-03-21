@@ -23,18 +23,21 @@ struct FloorView {
               WallModel& wall_model, 
               CarpetModel& carpet_model, 
               Pipeline& pipeline, 
-              Model& test_box) {
+              Model& test_box,
+              Texture& carpet_tex,
+              Texture& floor_tex,
+              Texture& wall_tex,
+              Texture& sofa_tex) {
         
-        // 1. Draw Base Floor
-        base_floor_view.draw(base_floor, pipeline, test_box);
-
-        // 2. Draw Carpets
-        carpet_view.draw(carpet_model, pipeline, test_box);
-
-        // 3. Draw Walls
-        wall_view.draw(wall_model, pipeline, test_box);
-
-        // 4. Draw Sofas
-        sofa_view.draw(sofa_model, pipeline, test_box);
+        // 1. Draw Base Floor (Textured)
+        base_floor_view.draw(base_floor, pipeline, test_box, floor_tex);
+ 
+        // 2. Draw Carpets (Solid Color)
+        carpet_view.draw(carpet_model, pipeline, test_box, carpet_tex); 
+        // 3. Draw Walls (Textured)
+        wall_view.draw(wall_model, pipeline, test_box, wall_tex);
+ 
+        // 4. Draw Sofas (Textured)
+        sofa_view.draw(sofa_model, pipeline, test_box, sofa_tex);
     }
 };

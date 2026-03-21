@@ -29,6 +29,10 @@ struct ExploreFloor {
 
     // Assets
     Model test_box; // Internal model for drawing boxes
+    Texture carpet_tex;
+    Texture floor_tex;
+    Texture wall_tex;
+    Texture sofa_tex;
 
     void init() {
         base_floor.init();
@@ -36,10 +40,20 @@ struct ExploreFloor {
         wall_model.init();
         carpet_model.init();
         test_box.init();
+        
+        // Load 3D Textures
+        carpet_tex.init("carpet.jpg");
+        floor_tex.init("wood_floor.jpg");
+        wall_tex.init("plastered_wall.jpg");
+        sofa_tex.init("floral_jacquard.jpg");
     }
 
     void destroy() {
         test_box.destroy();
+        carpet_tex.destroy();
+        floor_tex.destroy();
+        wall_tex.destroy();
+        sofa_tex.destroy();
     }
 
     void handle_input(Camera& camera, float delta) {
@@ -54,7 +68,7 @@ struct ExploreFloor {
         pipeline.bind();
         camera.bind();
         
-        // Draw Environment
-        view.draw(base_floor, sofa_model, wall_model, carpet_model, pipeline, test_box);
+        // Draw Environment with Textures
+        view.draw(base_floor, sofa_model, wall_model, carpet_model, pipeline, test_box, carpet_tex, floor_tex, wall_tex, sofa_tex);
     }
 };

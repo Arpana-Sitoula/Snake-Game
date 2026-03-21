@@ -9,10 +9,15 @@
  * Purpose: Renders the sofas in the scene.
  */
 struct SofaView {
-    void draw(SofaModel& model, Pipeline& pipeline, Model& test_box) {
+    void draw(SofaModel& model, Pipeline& pipeline, Model& test_box, Texture& texture) {
+        pipeline.use_texture(true);
+        texture.bind();
+
         for (const auto& sofa : model.sofas) {
             draw_sofa(pipeline, test_box, sofa.position, sofa.rotation, sofa.color);
         }
+
+        pipeline.use_texture(false);
     }
 
 private:
