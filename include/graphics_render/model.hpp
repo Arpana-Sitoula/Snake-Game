@@ -25,6 +25,10 @@ struct Model {
     }
     
     // Set position in world space
+    void set_position(const glm::vec3& pos) {
+        transform._position = pos;
+    }
+
     void set_position(float x, float y, float z) {
         transform._position = glm::vec3(x, y, z);
     }

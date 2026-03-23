@@ -40,6 +40,7 @@ struct Engine {
         camera._rotation = glm::vec3(0, 0, 0);
         camera._fov = 50.0f;
 
+        pipeline.bind();
         pipeline.use_texture(false);
     }
     

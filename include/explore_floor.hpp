@@ -3,7 +3,9 @@
 #include "explore_floor/model/sofa_model.hpp"
 #include "explore_floor/model/wall_model.hpp"
 #include "explore_floor/model/carpet_model.hpp"
+#include "explore_floor/model/screen_model.hpp"
 #include "explore_floor/view/floor_view.hpp"
+#include "explore_floor/view/screen_view.hpp"
 #include "explore_floor/controller/floor_controller.hpp"
 #include "graphics_render/pipeline.hpp"
 #include "graphics_render/camera.hpp"
@@ -20,9 +22,11 @@ struct ExploreFloor {
     SofaModel sofa_model;
     WallModel wall_model;
     CarpetModel carpet_model;
+    ScreenModel screen_model;
 
-    // View
+    // Views
     FloorView view;
+    ScreenView screen_view;
 
     // Controller
     FloorController controller;
@@ -39,6 +43,7 @@ struct ExploreFloor {
         sofa_model.init();
         wall_model.init();
         carpet_model.init();
+        screen_model.init();
         test_box.init();
         
         // Load 3D Textures
@@ -70,5 +75,8 @@ struct ExploreFloor {
         
         // Draw Environment with Textures
         view.draw(base_floor, sofa_model, wall_model, carpet_model, pipeline, test_box, carpet_tex, floor_tex, wall_tex, sofa_tex);
+        
+        // Draw Screen
+        screen_view.draw(screen_model, pipeline, test_box);
     }
 };

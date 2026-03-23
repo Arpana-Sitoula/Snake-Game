@@ -10,6 +10,9 @@ struct Sofa {
     glm::vec3 position;
     float rotation;
     glm::vec4 color;
+    float width = 12.0f;
+    bool has_left_arm = true;
+    bool has_right_arm = true;
 };
 
 /**
@@ -20,9 +23,10 @@ struct SofaModel {
     std::vector<Sofa> sofas;
 
     void init() {
-        // Sofa 1 (facing entrance)
-        sofas.push_back({glm::vec3(0, 0, -6), 0, glm::vec4(0.5f, 0.25f, 0.15f, 1.0f)});
-        // Sofa 2 (facing Sofa 1)
-        sofas.push_back({glm::vec3(0, 0, 4), glm::radians(180.0f), glm::vec4(0.5f, 0.25f, 0.15f, 1.0f)});
+        // Sofa 1 (Back segment, facing entrance)
+        sofas.push_back({glm::vec3(0.00f, 0, -7.25f), 0, glm::vec4(0.5f, 0.25f, 0.15f, 1.0f), 7.5f, true, false});
+
+        // Sofa 2 (Side segment, perpendicular)
+        sofas.push_back({glm::vec3(3.25f, 0, -5.75f), glm::radians(-90.0f), glm::vec4(0.5f, 0.25f, 0.15f, 1.0f), 4.5f, true, true});
     }
 };
