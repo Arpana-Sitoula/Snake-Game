@@ -22,10 +22,6 @@ struct GameSiteManager {
     void init() {
         snake_game.init();
         explore_floor.init();
-        
-        if (current_state == State::EXPLORE_FLOOR) {
-            SDL_SetWindowRelativeMouseMode(SDL_GetGrabbedWindow(), true);
-        }
     }
 
     void destroy() {
@@ -55,6 +51,12 @@ struct GameSiteManager {
 
         if (current_state == State::SNAKE_GAME) {
             snake_game.handle_input();
+        } else {
+            // EXPLORE FLOOR
+            // Fail-safe: Ensure mouse is locked if we are in 3D mode
+            if (!SDL_GetWindowRelativeMouseMode(window._window_p)) {
+                SDL_SetWindowRelativeMouseMode(window._window_p, true);
+            }
         }
     }
 

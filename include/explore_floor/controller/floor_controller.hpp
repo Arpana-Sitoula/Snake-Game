@@ -11,7 +11,7 @@ struct FloorController {
     void handle_input(Camera& camera, float delta) {
         // 3D Camera Controls (WASD + Mouse)
         float speed = 8.0f * delta;
-        float sensitivity = 0.002f;
+        float sensitivity = 0.003f;
 
         if (Keys::down(SDLK_W)) camera.translate(0, 0, -speed);
         if (Keys::down(SDLK_S)) camera.translate(0, 0, speed);
