@@ -13,8 +13,8 @@ struct Transform {
     void bind() {
         // normals should only ever be rotated
         glm::mat4x4 normal_matrix(1.0);
-        normal_matrix = glm::rotate(normal_matrix, _rotation.x, glm::vec3(1, 0, 0));
         normal_matrix = glm::rotate(normal_matrix, _rotation.y, glm::vec3(0, 1, 0));
+        normal_matrix = glm::rotate(normal_matrix, _rotation.x, glm::vec3(1, 0, 0));
         normal_matrix = glm::rotate(normal_matrix, _rotation.z, glm::vec3(0, 0, 1));
 
         // calculate transform/model matrix from transform components

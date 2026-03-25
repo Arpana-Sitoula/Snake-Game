@@ -13,17 +13,17 @@ struct Texture {
             std::exit(1);
         }
 
+
         // store width and height
         _width = texture_raw_p->w;
         _height = texture_raw_p->h;
 
-        // SDL3: surface->format is an enum, we need details for bits per pixel
         const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(texture_raw_p->format);
         bool has_alpha = details->bits_per_pixel == 32;
         GLenum internal_format = has_alpha ? GL_SRGB8_ALPHA8 : GL_SRGB8;
         GLenum data_format = has_alpha ? GL_RGBA : GL_RGB;
 
-        // create texture to store image in (texture is gpu buffer)
+        // create texture to store image in gpu buffer
         glCreateTextures(GL_TEXTURE_2D, 1, &_texture);
 
         // upload to the GPU
@@ -33,9 +33,9 @@ struct Texture {
         // free image on cpu side
         SDL_DestroySurface(texture_raw_p);
 
-        // set sampler parameters
-        glTextureParameteri(_texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // interpolation mode when scaling image down
-        glTextureParameteri(_texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // interpolation mode when scaling image up
+        glGenerateTextureMipmap(_texture);
+        glTextureParameteri(_texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // interpolation mode when scaling image down
+        glTextureParameteri(_texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);               // interpolation mode when scaling image up
     }
     void destroy() {
         glDeleteTextures(1, &_texture);

@@ -13,31 +13,52 @@
  * - draw(): Binds its transform and tells its mesh to draw
  */
 struct Model {
-    Mesh mesh;
+    Mesh* _mesh_p = nullptr;
+    Mesh _internal_mesh;
     Transform transform;
     
     void init() {
-        mesh.init();
+        _internal_mesh.init();
+        _mesh_p = &_internal_mesh;
+    }
+
+    void init(Mesh* mesh) {
+        _mesh_p = mesh;
     }
     
     void destroy() {
-        mesh.destroy();
+        _internal_mesh.destroy();
     }
     
     // Set position in world space
+    void set_position(const glm::vec3& pos) {
+        transform._position = pos;
+    }
+
+    void set_position(float x, float y, float z) {
+        transform._position = glm::vec3(x, y, z);
+    }
+    
     void set_position(float x, float y) {
         transform._position = glm::vec3(x, y, 0);
     }
     
     // Set size (uniform scale)
     void set_scale(float size) {
-        transform._scale = glm::vec3(size, size, 1);
+        transform._scale = glm::vec3(size, size, size);
+    }
+
+    // Set size (per-axis scale)
+    void set_scale(float x, float y, float z) {
+        transform._scale = glm::vec3(x, y, z);
     }
     
-    // Draw this model (caller must set color via pipeline first!)
+    // Draw this model 
     void draw() {
         transform.bind();
-        mesh.bind();
-        mesh.draw();
+        if (_mesh_p) {
+            _mesh_p->bind();
+            _mesh_p->draw();
+        }
     }
 };

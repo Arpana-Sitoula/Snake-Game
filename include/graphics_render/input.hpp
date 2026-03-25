@@ -94,10 +94,10 @@ namespace Input {
 				Data::get().y = event.button.y;
 				break;
 			case SDL_EventType::SDL_EVENT_MOUSE_MOTION:
-				Data::get().dx = event.motion.xrel;
-				Data::get().dy = event.motion.yrel;
-				Data::get().x = event.motion.x;
-				Data::get().y = event.motion.y;
+				Data::get().dx += (float)event.motion.xrel;
+				Data::get().dy += (float)event.motion.yrel;
+				Data::get().x = (float)event.motion.x;
+				Data::get().y = (float)event.motion.y;
 				break;
 			default: break;
 		}

@@ -17,4 +17,5 @@ using namespace gl;
 
 #include <glm/glm.hpp> // main header
 #include <glm/ext/matrix_transform.hpp> // translation, rotation, etc
+#include <glm/gtc/quaternion.hpp> // quaternions for camera
 #include <glm/gtc/type_ptr.hpp> // obtain pointers

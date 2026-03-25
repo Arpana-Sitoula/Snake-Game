@@ -14,12 +14,20 @@
 struct Camera {
     // translate relative to camera direction
     void translate(float x, float y, float z) {
-        _position += glm::quat(_rotation) * glm::vec3(x, y, z);
+        // Calculate the rotation for the current euler angles
+        glm::quat q = glm::quat(glm::vec3(_rotation.x, _rotation.y, _rotation.z));
+        _position += q * glm::vec3(x, y, z);
+    }
+
+    void rotate(float pitch, float yaw) {
+        _rotation.x += pitch;
+        _rotation.y += yaw;
+        _rotation.x = glm::clamp(_rotation.x, glm::radians(-89.0f), glm::radians(89.0f));
     }
 
     void bind() {
         // projection matrix
-        glm::mat4x4 projection_matrix = glm::perspectiveFov(_fov, _width, _height, _near_plane, _far_plane);
+        glm::mat4x4 projection_matrix = glm::perspectiveFov(glm::radians(_fov), _width, _height, _near_plane, _far_plane);
 
         // transformation matrix (inverse of normal transform, since it is the camera)
         glm::mat4x4 transform_matrix(1.0f);
