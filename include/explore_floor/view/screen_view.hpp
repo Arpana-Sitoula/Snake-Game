@@ -31,7 +31,7 @@ struct ScreenView {
             prompt_tex.bind();
             test_box.set_position(glm::vec3(-7.5f, 1.2f, 0.0f)); 
             test_box.transform._rotation = glm::vec3(0, glm::radians(90.0f), 0);
-            test_box.set_scale(2.5f, 0.4f, 1); // Positive scale restored
+            test_box.set_scale(2.5f, 0.4f, 1);
             test_box.draw();
 
             glDisable(GL_BLEND);

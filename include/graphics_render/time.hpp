@@ -31,7 +31,7 @@ struct Time {
         _total = double(total.count()) / 1000000.0; // convert to seconds
     }
 
-    double _delta; // seconds since last frame (multiply with "speeds" for frame-independant speeds)
+    double _delta; // seconds since last frame 
     double _total; // seconds since program launch
 private:
     Clock::time_point timestamp_init; // timestamp set at program launch

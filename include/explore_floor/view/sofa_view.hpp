@@ -28,7 +28,7 @@ private:
             return glm::rotate(glm::mat4(1.0f), base_rotation, glm::vec3(0, 1, 0)) * glm::vec4(v, 1.0f);
         };
 
-        // Front face: pos is center + rotated Offset(0, 0, size.z/2)
+        // Front
         test_box.set_position(center + glm::vec3(rot_y(glm::vec3(0, 0, size.z/2))));
         test_box.transform._rotation = glm::vec3(0, base_rotation, 0);
         test_box.set_scale(size.x, size.y, 1);

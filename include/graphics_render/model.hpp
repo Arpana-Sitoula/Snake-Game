@@ -53,7 +53,7 @@ struct Model {
         transform._scale = glm::vec3(x, y, z);
     }
     
-    // Draw this model (caller must set color via pipeline first!)
+    // Draw this model 
     void draw() {
         transform.bind();
         if (_mesh_p) {

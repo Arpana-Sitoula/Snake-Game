@@ -14,7 +14,7 @@
 struct Camera {
     // translate relative to camera direction
     void translate(float x, float y, float z) {
-        // Calculate the rotation quaternion for the current euler angles
+        // Calculate the rotation for the current euler angles
         glm::quat q = glm::quat(glm::vec3(_rotation.x, _rotation.y, _rotation.z));
         _position += q * glm::vec3(x, y, z);
     }
@@ -22,7 +22,6 @@ struct Camera {
     void rotate(float pitch, float yaw) {
         _rotation.x += pitch;
         _rotation.y += yaw;
-        // Limit pitch to prevent flipping
         _rotation.x = glm::clamp(_rotation.x, glm::radians(-89.0f), glm::radians(89.0f));
     }
 

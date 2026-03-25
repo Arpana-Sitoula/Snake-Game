@@ -65,7 +65,7 @@ struct GameSiteManager {
             snake_game.handle_input();
         } else {
             // EXPLORE FLOOR
-            // Fail-safe: Ensure mouse is locked if we are in 3D mode
+            // Fail-safe: Ensure mouse is locked if we are in 3D mode (TODO: Find solution for exit)
             if (!SDL_GetWindowRelativeMouseMode(window._window_p)) {
                 SDL_SetWindowRelativeMouseMode(window._window_p, true);
             }
@@ -74,7 +74,7 @@ struct GameSiteManager {
 
     void update(float delta, Camera& camera) {
         if (current_state == State::SNAKE_GAME) {
-            // Ensure camera stays locked in 2D position während playing
+            // Ensure camera stays locked in 2D position while playing
             camera._position = glm::vec3(0, 0, 10);
             camera._rotation = glm::vec3(0, 0, 0);
             camera._fov = 50.0f;
@@ -97,7 +97,6 @@ struct GameSiteManager {
 
     // Returns true if camera is within interaction range of the screen front zone
     bool near_screen(const Camera& camera) const {
-        // Screen is at X=-9.85, facing +X. Interaction zone is in front of it.
         glm::vec3 zone = glm::vec3(-7.5f, 1.8f, 0.0f);
         float dist = glm::length(glm::vec3(camera._position) - zone);
         return dist < 4.0f;
