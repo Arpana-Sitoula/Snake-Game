@@ -46,6 +46,7 @@ struct ExploreFloor {
     Texture floor_tex;
     Texture wall_tex;
     Texture sofa_tex;
+    Texture screen_tex;
     Texture plant_leaf_tex, plant_pot_tex, plant_soil_tex, plant_root_tex;
 
     void init() {
@@ -80,6 +81,9 @@ struct ExploreFloor {
         plant_pot_tex.init("indoor plant_2_COL.jpg");
         plant_soil_tex.init("indoor plant_2_COL.jpg");
         plant_root_tex.init("indoor plant_2_COL.jpg");
+
+        // Screen 
+        screen_tex.init("Game with Hello Kitty.png");
     }
 
     void destroy() {
@@ -88,6 +92,7 @@ struct ExploreFloor {
         floor_tex.destroy();
         wall_tex.destroy();
         sofa_tex.destroy();
+        screen_tex.destroy();
         plant_leaf_tex.destroy();
         plant_pot_tex.destroy();
         plant_soil_tex.destroy();
@@ -110,7 +115,7 @@ struct ExploreFloor {
         view.draw(base_floor, sofa_model, wall_model, carpet_model, pipeline, test_box, carpet_tex, floor_tex, wall_tex, sofa_tex);
         
         // Draw Screen
-        screen_view.draw(screen_model, pipeline, test_box);
+        screen_view.draw(screen_model, pipeline, test_box, screen_tex);
 
         // Draw Plant 
         plant_view.draw(plant_model, pipeline, 
