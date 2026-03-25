@@ -35,9 +35,9 @@ struct Texture {
         // free image on cpu side
         SDL_DestroySurface(texture_raw_p);
 
-        // set sampler parameters
-        glTextureParameteri(_texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // interpolation mode when scaling image down
-        glTextureParameteri(_texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // interpolation mode when scaling image up
+        glGenerateTextureMipmap(_texture);
+        glTextureParameteri(_texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // interpolation mode when scaling image down
+        glTextureParameteri(_texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);               // interpolation mode when scaling image up
     }
     void destroy() {
         glDeleteTextures(1, &_texture);
