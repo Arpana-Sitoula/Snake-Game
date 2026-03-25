@@ -1,6 +1,7 @@
 #pragma once
 #include "../../graphics_render/input.hpp"
 #include "../../graphics_render/camera.hpp"
+#include "../physics.hpp"
 #include <glm/glm.hpp>
 
 /**
@@ -9,6 +10,9 @@
  */
 struct FloorController {
     void handle_input(Camera& camera, float delta) {
+        // Save current position for possible collision reversion
+        old_pos = camera._position;
+
         // 3D Camera Controls (WASD + Mouse)
         float speed = 8.0f * delta;
         float sensitivity = 0.003f;
@@ -22,30 +26,16 @@ struct FloorController {
         // 1. Lock height to eye level
         camera._position.y = 2.5f;
 
-        // 2. Collision Detection 
-        float boundary = 9.8f;
-        float door_width = 2.0f;
-
-        // Clamp Z (Forward/Back)
-        if (glm::abs(camera._position.x) > door_width) {
-            // If not in the door opening, cannot go past z = 9.8
-            camera._position.z = glm::clamp(camera._position.z, -boundary, boundary);
-        } else {
-            // In the door opening, can go further out (to "spawn" area)
-            camera._position.z = glm::clamp(camera._position.z, -boundary, 15.0f);
-        }
-
-        // Clamp X (Left/Right)
-        if (camera._position.z < boundary) {
-            // Inside the room, clamp to walls
-            camera._position.x = glm::clamp(camera._position.x, -boundary, boundary);
-        } else {
-            // Entering/Leaving, clamp to door width
-            camera._position.x = glm::clamp(camera._position.x, -door_width, door_width);
+        // 2. Proactive Collision Detection
+        if (FloorPhysics::is_colliding(camera._position, 0.6f)) {
+            // If movement resulted in collision, REVERT (simple fix)
+            camera._position = old_pos;
         }
 
         // Mouse Look
         auto [dx, dy] = Mouse::delta();
         camera.rotate(-dy * sensitivity, -dx * sensitivity);
     }
+private:
+    glm::vec3 old_pos;
 };

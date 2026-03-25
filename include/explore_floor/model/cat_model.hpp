@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
 #include <iostream>
+#include "../physics.hpp"
 
 enum class CatState { IDLE, WALKING };
 
@@ -15,15 +16,12 @@ struct CatModel {
     float state_timer = 0;
     
     float speed = 0.6f;
+    float anim_time = 0.0f;
     
     void init() {
         // Floor surface is at Y = -0.05f
         position = glm::vec3(0.0f, -0.05f, 0.0f);
-        
-        // IMPORTANT: OpenGL/GLM uses RADIANS, not degrees. 
-        // -90.0f degrees is about -1.57 radians.
         rotation = glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f);
-        
         scale = glm::vec3(0.03f); 
         state = CatState::IDLE;
         state_timer = 2.0f; 
@@ -36,40 +34,44 @@ struct CatModel {
             if (state_timer <= 0) {
                 pick_new_target();
             }
+            // Reset animation when standing still
+            anim_time = 0;
+            position.y = -0.05f;
+            rotation.z = 0; 
         } else {
             glm::vec3 to_target = target_pos - position;
             to_target.y = 0; 
             float dist = glm::length(to_target);
             
-            if (dist < 0.2f) {
+            if (dist < 0.005f) {
                 state = CatState::IDLE;
                 state_timer = glm::linearRand(3.0f, 8.0f);
             } else {
-                position += glm::normalize(to_target) * speed * delta;
+                glm::vec3 next_pos = position + glm::normalize(to_target) * speed * delta;
                 
-                // Yaw should stay in radians
+                if (FloorPhysics::is_colliding(next_pos, 0.3f)) {
+                    state = CatState::IDLE;
+                    state_timer = 2.0f;
+                    return;
+                }
+                
+                position = next_pos;
                 float target_yaw = atan2(to_target.x, to_target.z);
                 rotation.y = target_yaw;
+
+                // --- Walking animation of cat (Wobble & Bounce) ---
+                anim_time += delta * 12.0f;
+                position.y = -0.05f + abs(sin(anim_time)) * 0.08f; 
+                rotation.z = sin(anim_time) * 0.15f; 
             }
         }
-        // Ensure it stays on floor
-        position.y = -0.05f;
-    }
-    
-    bool is_valid(glm::vec3 p) {
-        // Wall bounds
-        if (p.x < -8.5f || p.x > 8.5f || p.z < -8.5f || p.z > 8.5f) return false;
-        // Avoid Sofa area
-        if (p.x > -5.0f && p.x < 7.0f && p.z < -4.0f) return false;
-        // Avoid Plant area
-        if (p.x < -5.0f && p.x > -8.5f && p.z > 2.0f && p.z < 6.0f) return false;
-        return true;
     }
     
     void pick_new_target() {
-        for (int i = 0; i < 20; ++i) {
+        for (int i = 0; i < 30; ++i) {
             glm::vec3 p = glm::vec3(glm::linearRand(-8.5f, 8.5f), -0.05f, glm::linearRand(-8.5f, 8.5f));
-            if (is_valid(p)) {
+            // Ensure target isn't inside furniture
+            if (!FloorPhysics::is_colliding(p, 0.6f)) {
                 target_pos = p;
                 state = CatState::WALKING;
                 return;

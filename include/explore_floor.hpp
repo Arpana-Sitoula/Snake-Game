@@ -15,6 +15,7 @@
 #include "graphics_render/camera.hpp"
 #include "graphics_render/model.hpp"
 #include "graphics_render/texture.hpp"
+#include "graphics_render/audio.hpp"
 
 /**
  * EXPLORE FLOOR (MVC Container)
@@ -57,6 +58,11 @@ struct ExploreFloor {
     Texture prompt_tex;
     Texture cat_tex;
     Texture plant_leaf_tex, plant_pot_tex, plant_soil_tex, plant_root_tex;
+
+    // Audio
+    Audio cat_meow;
+    SDL_AudioStream* meow_stream = nullptr;
+    float meow_cooldown = 0;
 
     void init() {
         base_floor.init();
@@ -104,6 +110,16 @@ struct ExploreFloor {
 
         // Cat Texture
         cat_tex.init("Cat_diffuse.jpg");
+
+        // Audio Init
+        cat_meow.init("assets/audio/meow.wav");
+        meow_stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr, nullptr, nullptr);
+        if (meow_stream) {
+            SDL_AudioSpec device_format;
+            SDL_GetAudioDeviceFormat(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &device_format, nullptr);
+            SDL_SetAudioStreamFormat(meow_stream, &cat_meow.spec, &device_format);
+            SDL_ResumeAudioStreamDevice(meow_stream);
+        }
     }
 
     void destroy() {
@@ -120,14 +136,37 @@ struct ExploreFloor {
         plant_root_tex.destroy();
         cat_tex.destroy();
         cat_mesh.destroy();
+
+        if (meow_stream) SDL_DestroyAudioStream(meow_stream);
+        cat_meow.destroy();
     }
 
     void handle_input(Camera& camera, float delta) {
         controller.handle_input(camera, delta);
     }
 
-    void update(float delta) {
+    void update(float delta, Camera& camera) {
         cat_model.update(delta);
+
+        float dist = glm::length(glm::vec3(camera._position) - cat_model.position);
+
+        // 1. When cat is nearby player
+        if (meow_cooldown > 0) {
+            meow_cooldown -= delta;
+        } else {
+            if (dist < 3.5f) {
+                cat_meow.play(meow_stream);
+                meow_cooldown = 6.0f; 
+            }
+        }
+
+        // 2. When player collide with cat
+        static float bump_cooldown = 0;
+        if (bump_cooldown > 0) bump_cooldown -= delta;
+        if (dist < 1.0f && bump_cooldown <= 0) {
+            cat_meow.play(meow_stream);
+            bump_cooldown = 1.0f; 
+        }
     }
 
     void draw(Pipeline& pipeline, Camera& camera, bool show_prompt = false) {

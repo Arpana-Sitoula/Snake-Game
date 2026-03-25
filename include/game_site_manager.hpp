@@ -83,7 +83,7 @@ struct GameSiteManager {
         } else {
             glEnable(GL_DEPTH_TEST);
             explore_floor.handle_input(camera, delta);
-            explore_floor.update(delta);
+            explore_floor.update(delta, camera);
         }
     }
 
@@ -95,7 +95,6 @@ struct GameSiteManager {
         }
     }
 
-    // Returns true if camera is within interaction range of the screen front zone
     bool near_screen(const Camera& camera) const {
         glm::vec3 zone = glm::vec3(-7.5f, 1.8f, 0.0f);
         float dist = glm::length(glm::vec3(camera._position) - zone);
