@@ -8,7 +8,9 @@
 #include "explore_floor/view/floor_view.hpp"
 #include "explore_floor/view/screen_view.hpp"
 #include "explore_floor/view/plant_view.hpp"
+#include "explore_floor/view/cat_view.hpp"
 #include "explore_floor/controller/floor_controller.hpp"
+#include "explore_floor/model/cat_model.hpp"
 #include "graphics_render/pipeline.hpp"
 #include "graphics_render/camera.hpp"
 #include "graphics_render/model.hpp"
@@ -26,11 +28,13 @@ struct ExploreFloor {
     CarpetModel carpet_model;
     ScreenModel screen_model;
     PlantModel plant_model;
+    CatModel cat_model;
 
     // Views
     FloorView view;
     ScreenView screen_view;
     PlantView plant_view;
+    CatView cat_view;
 
     // Controller
     FloorController controller;
@@ -42,12 +46,16 @@ struct ExploreFloor {
     Model plant_leaves_obj, plant_pot_obj, plant_soil_obj, plant_root_obj;
     Mesh  plant_leaves_mesh, plant_pot_mesh, plant_soil_mesh, plant_root_mesh;
 
+    Model cat_obj;
+    Mesh  cat_mesh;
+
     Texture carpet_tex;
     Texture floor_tex;
     Texture wall_tex;
     Texture sofa_tex;
     Texture screen_tex;
     Texture prompt_tex;
+    Texture cat_tex;
     Texture plant_leaf_tex, plant_pot_tex, plant_soil_tex, plant_root_tex;
 
     void init() {
@@ -57,6 +65,7 @@ struct ExploreFloor {
         carpet_model.init();
         screen_model.init();
         plant_model.init();
+        cat_model.init();
         test_box.init();
 
         // Load Plant Parts by Material (Split into 4 components for correct texturing)
@@ -65,6 +74,10 @@ struct ExploreFloor {
         plant_pot_mesh.load_obj(plant_path, "indoor_plant_02", "IDP_Pot");
         plant_soil_mesh.load_obj(plant_path, "indoor_plant_02", "IDP_ground");
         plant_root_mesh.load_obj(plant_path, "indoor_plant_02", "IDP_root");
+
+        // Load Cat
+        cat_mesh.load_obj("../assets/models/12221_Cat_v1_l3.obj");
+        cat_obj.init(&cat_mesh);
 
         plant_leaves_obj.init(&plant_leaves_mesh);
         plant_pot_obj.init(&plant_pot_mesh);
@@ -88,6 +101,9 @@ struct ExploreFloor {
 
         // Interaction Prompt Text
         prompt_tex.init("prompt tex.png");
+
+        // Cat Texture
+        cat_tex.init("Cat_diffuse.jpg");
     }
 
     void destroy() {
@@ -102,6 +118,8 @@ struct ExploreFloor {
         plant_pot_tex.destroy();
         plant_soil_tex.destroy();
         plant_root_tex.destroy();
+        cat_tex.destroy();
+        cat_mesh.destroy();
     }
 
     void handle_input(Camera& camera, float delta) {
@@ -109,7 +127,7 @@ struct ExploreFloor {
     }
 
     void update(float delta) {
-        // Any logic for updating the floor models (e.g. animations)
+        cat_model.update(delta);
     }
 
     void draw(Pipeline& pipeline, Camera& camera, bool show_prompt = false) {
@@ -128,5 +146,8 @@ struct ExploreFloor {
                         plant_pot_obj,    plant_pot_tex,
                         plant_soil_obj,   plant_soil_tex,
                         plant_root_obj,   plant_root_tex);
+        
+        // Draw Cat
+        cat_view.draw(cat_model, pipeline, cat_obj, cat_tex);
     }
 };
