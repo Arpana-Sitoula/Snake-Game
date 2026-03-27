@@ -23,4 +23,4 @@ The transition between exploration and gaming is handled via an **Interaction Zo
 
 ## Credits & Resources
 
-All resources, including 3D models and textures, are used exclusively for educational and study purposes.
+All resources, including 3D models, textures and audios, are used exclusively for educational and study purposes.
