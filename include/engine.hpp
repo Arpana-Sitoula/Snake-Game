@@ -60,6 +60,10 @@ struct Engine {
     
     auto handle_sdl_frame() -> SDL_AppResult {
         time.update();
+
+        if (Keys::pressed(SDLK_ESCAPE)) {
+            return SDL_AppResult::SDL_APP_SUCCESS;
+        }
         
         // Clear screen
         glClearColor(0.05f, 0.05f, 0.1f, 1.0f);
