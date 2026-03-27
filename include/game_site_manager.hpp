@@ -89,6 +89,7 @@ struct GameSiteManager {
 
     void draw(Pipeline& pipeline, Camera& camera) {
         if (current_state == State::SNAKE_GAME) {
+            pipeline.use_lighting(false);
             snake_game.draw(pipeline, camera);
         } else {
             explore_floor.draw(pipeline, camera, near_screen(camera));

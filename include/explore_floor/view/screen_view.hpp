@@ -16,11 +16,13 @@ struct ScreenView {
 
         // --- Screen Display ---
         pipeline.use_texture(true);
+        pipeline.set_emissive(true);
         screen_tex.bind();
         test_box.set_position(model.screen.position + glm::vec3(0.15f, 0.0f, 0.0f));
         test_box.transform._rotation = glm::vec3(0, glm::radians(90.0f), 0);
         test_box.set_scale(model.screen.size.z, model.screen.size.y, 1); // Positive scale restored
         test_box.draw();
+        pipeline.set_emissive(false);
 
         // --- Interaction prompt text ---
         if (show_prompt) {

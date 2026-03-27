@@ -16,6 +16,12 @@ layout(binding = 0) uniform sampler2D tex_diffuse;
 layout(location = 16) uniform vec4 u_color;
 layout(location = 17) uniform int u_use_uniform_color;
 layout(location = 18) uniform int u_use_texture;
+layout(location = 19) uniform int u_is_emissive;
+
+// 4 Point Lights
+layout(location = 20) uniform vec3 u_light_pos[4];
+layout(location = 30) uniform vec3 u_light_col[4];
+layout(location = 40) uniform int u_use_lighting;
 
 // calculate the diffuse light strength
 float calc_diffuse(vec3 normal, vec3 light_dir) {
@@ -35,20 +41,35 @@ void main() {
         base_col = tex_col;
     }
 
-    // 3. LIGHTING
-    vec3 light_col = vec3(1.0, 0.95, 0.85); // warm light
-    vec3 light_pos = vec3(5, 10, 5); 
-    vec3 light_dir = normalize(light_pos - in_pos);
+    // EMISSIVE BYPASS (Static glow)
+    if (u_is_emissive != 0) {
+        out_color = base_col;
+        return;
+    }
 
-    // ambient light
-    float ambient_str = 0.4; 
-    vec3 ambient_light = light_col * ambient_str;
-    
-    // diffuse light
-    float diffuse_str = calc_diffuse(normal, light_dir);
-    vec3 diffuse_light = light_col * diffuse_str;
+    // 3. LIGHTING
+    if (u_use_lighting == 0) {
+        // FULL BRIGHT (For UI/Snake Game)
+        out_color = base_col;
+        return;
+    }
+
+    vec3 total_diffuse = vec3(0.0);
+    float ambient_str = 0.03; // Dark Effect
+    vec3 ambient_light = vec3(1.0, 0.95, 0.9) * ambient_str;
+
+    for (int i = 0; i < 4; i++) {
+        vec3 light_dir = normalize(u_light_pos[i] - in_pos);
+        float dist = length(u_light_pos[i] - in_pos);
+        
+        // Attenuation (Light drops off with distance)
+        float attenuation = 1.0 / (1.0 + 0.1 * dist + 0.02 * (dist * dist));
+        
+        float diffuse_fact = calc_diffuse(normal, light_dir);
+        total_diffuse += u_light_col[i] * diffuse_fact * attenuation;
+    }
 
     // 4. FINAL OUTPUT
-    out_color.xyz = (ambient_light + diffuse_light) * base_col.xyz;
+    out_color.xyz = (ambient_light + total_diffuse) * base_col.xyz;
     out_color.a = base_col.a;
 }

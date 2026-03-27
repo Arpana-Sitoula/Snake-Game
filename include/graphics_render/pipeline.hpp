@@ -100,8 +100,23 @@ struct Pipeline {
         glUniform1i(18, enabled ? 1 : 0);
     }
 
+    void set_emissive(bool enabled) {
+        glUniform1i(19, enabled ? 1 : 0);
+    }
+
+    void set_light(int index, const glm::vec3& pos, const glm::vec3& col) {
+        if (index < 0 || index >= 4) return;
+        glUniform3f(20 + index, pos.x, pos.y, pos.z);
+        glUniform3f(30 + index, col.r, col.g, col.b);
+    }
+
+    void use_lighting(bool enabled) {
+        glUniform1i(40, enabled ? 1 : 0);
+    }
+
     void clear_color_override() {
         use_uniform_color(false);
+        set_emissive(false);
     }
 
     GLuint _shader_program;

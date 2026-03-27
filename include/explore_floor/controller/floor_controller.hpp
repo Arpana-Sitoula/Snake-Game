@@ -27,9 +27,9 @@ struct FloorController {
         
         // 1. Bobbing effect while Walking 
         if (is_moving) {
-            walk_timer += delta * 5.0f; // Speed of steps
+            walk_timer += delta * 2.0f; // Speed of steps
             float bob = glm::sin(walk_timer) * 0.10f;
-            camera._position.y = 2.5f + bob;
+            camera._position.y = 2.3f + bob;
         } else {
             // Smoothly return to standing height
             camera._position.y = glm::mix(camera._position.y, 2.5f, 5.0f * delta);
@@ -38,7 +38,6 @@ struct FloorController {
 
         // 2. Proactive Collision Detection
         if (FloorPhysics::is_colliding(camera._position, 0.00007f)) {
-            // If movement resulted in collision, REVERT (simple fix)
             camera._position = old_pos;
         }
 
